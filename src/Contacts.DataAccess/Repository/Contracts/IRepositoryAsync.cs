@@ -13,7 +13,7 @@ namespace Contacts.DataAccess.Repository.Contracts
         Task<List<T>> GetAllAsync();
         Task UpdateAsync(T entity);
         Task DeleteAsync(int id);
-        Task DeleteASync(T entity);
+        Task DeleteAsync(T entity);
         Task<bool> ExitsASync(int id);
         Task<int> SaveAsync();
     }
