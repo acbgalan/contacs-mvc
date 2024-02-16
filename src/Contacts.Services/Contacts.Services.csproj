@@ -6,4 +6,8 @@
     <Nullable>disable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Contacts.Models\Contacts.Models.csproj" />
+  </ItemGroup>
+
 </Project>
