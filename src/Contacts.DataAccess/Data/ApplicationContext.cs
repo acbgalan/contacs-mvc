@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using Contacts.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,5 +18,12 @@ namespace Contacts.DataAccess.Data
 
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Group> Groups { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            ApplicationSeeding.Seed(modelBuilder);
+        }
     }
 }
