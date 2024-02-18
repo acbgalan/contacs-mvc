@@ -29,7 +29,7 @@ namespace Contacts.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Group group)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(group);
             }
@@ -37,12 +37,39 @@ namespace Contacts.Web.Controllers
             await _uow.GroupRepository.AddAsync(group);
             int saveResult = await _uow.GroupRepository.SaveAsync();
 
-            if(saveResult > 0)
+            if (saveResult > 0)
             {
                 TempData["success"] = "Grupo creado con exito";
-            } else
+            }
+            else
             {
                 TempData["error"] = "Error al crear nuevo grupo";
+            }
+
+            return RedirectToAction("Index", "Group");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var group = await _uow.GroupRepository.GetAsync(id);
+
+            if (group == null)
+            {
+                return NotFound();
+            }
+
+            await _uow.GroupRepository.DeleteAsync(group);
+            int deleteResult = await _uow.SaveAsync();
+
+            if (deleteResult > 0)
+            {
+                TempData["success"] = "Grupo borrado con exito";
+            }
+            else
+            {
+                TempData["error"] = "Error al borrar grupo";
             }
 
             return RedirectToAction("Index", "Group");
