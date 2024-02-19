@@ -1,0 +1,21 @@
+﻿@model Contacts.Models.Group
+
+@{
+    ViewData["Title"] = "Detalles grupo";
+}
+
+<h1>Detalles grupo</h1>
+
+<div class="mb-3">
+    <label asp-for="Id" class="form-label"></label>
+    <input asp-for="Id" class="form-control" disabled />
+</div>
+<div class="mb-3">
+    <label asp-for="Name" class="form-label"></label>
+    <input asp-for="Name" class="form-control" />
+</div>
+<div class="row mb-3">
+    <div class="col-6 col-md-3 col-xl-2">
+        <a asp-controller="Group" asp-action="Index" class="btn btn-secondary w-100">Volver</a>
+    </div>
+</div>

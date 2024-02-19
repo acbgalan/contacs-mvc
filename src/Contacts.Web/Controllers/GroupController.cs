@@ -29,7 +29,7 @@ namespace Contacts.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Group group)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(group);
             }
@@ -37,10 +37,11 @@ namespace Contacts.Web.Controllers
             await _uow.GroupRepository.AddAsync(group);
             int saveResult = await _uow.GroupRepository.SaveAsync();
 
-            if(saveResult > 0)
+            if (saveResult > 0)
             {
                 TempData["success"] = "Grupo creado con exito";
-            } else
+            }
+            else
             {
                 TempData["error"] = "Error al crear nuevo grupo";
             }
@@ -48,6 +49,94 @@ namespace Contacts.Web.Controllers
             return RedirectToAction("Index", "Group");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var group = await _uow.GroupRepository.GetAsync(id);
+
+            if (group == null)
+            {
+                return NotFound();
+            }
+
+            await _uow.GroupRepository.DeleteAsync(group);
+            int deleteResult = await _uow.SaveAsync();
+
+            if (deleteResult > 0)
+            {
+                TempData["success"] = "Grupo borrado con exito";
+            }
+            else
+            {
+                TempData["error"] = "Error al borrar grupo";
+            }
+
+            return RedirectToAction("Index", "Group");
+        }
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var group = await _uow.GroupRepository.GetAsync((int)id);
+
+            if (group == null)
+            {
+                return NotFound();
+            }
+
+            return View(group);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int Id, Group group)
+        {
+            if (Id != group.Id)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(group);
+            }
+
+            await _uow.GroupRepository.UpdateAsync(group);
+            int editResult = await _uow.SaveAsync();
+
+            if (editResult > 0)
+            {
+                TempData["success"] = "Grupo editado con exito";
+            }
+            else
+            {
+                TempData["error"] = "Error al editar grupo";
+            }
+
+            return RedirectToAction("Index", "Group");
+        }
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var group = await _uow.GroupRepository.GetAsync((int)id);
+
+            if (group == null)
+            {
+                return NotFound();
+            }
+
+            return View(group);
+        }
 
     }
 }

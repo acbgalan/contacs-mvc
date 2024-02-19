@@ -1,0 +1,28 @@
+﻿@model Contacts.Models.Group
+
+@{
+    ViewData["Title"] = "Editar grupo";
+}
+
+<h1>Editar grupo</h1>
+
+<form asp-controller="Group" asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />    
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="row mb-3">
+        <div class="col-6 col-md-3 col-xl-2">
+            <input type="submit" class="btn btn btn-primary w-100" value="Guardar" />
+        </div>
+        <div class="col-6 col-md-3 col-xl-2">
+            <a asp-controller="Group" asp-action="Index" class="btn btn-secondary w-100">Volver</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
