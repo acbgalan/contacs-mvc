@@ -11,7 +11,9 @@
     <div class="mb-3">
         <label asp-for="Name" class="form-label"></label>
         <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+        <small class="text-danger">
+            <span asp-validation-for="Name"></span>
+        </small>        
     </div>
     <div class="row mb-3">
         <div class="col-6 col-md-3 col-xl-2">

@@ -27,7 +27,7 @@ namespace Contacts.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Group group)
+        public async Task<IActionResult> Create([FromBody] Group group)
         {
             if (!ModelState.IsValid)
             {
@@ -35,7 +35,7 @@ namespace Contacts.Web.Controllers
             }
 
             await _uow.GroupRepository.AddAsync(group);
-            int saveResult = await _uow.GroupRepository.SaveAsync();
+            int saveResult = await _uow.SaveAsync();
 
             if (saveResult > 0)
             {
