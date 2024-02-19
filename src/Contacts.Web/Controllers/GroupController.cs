@@ -75,6 +75,52 @@ namespace Contacts.Web.Controllers
             return RedirectToAction("Index", "Group");
         }
 
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var group = await _uow.GroupRepository.GetAsync((int)id);
+
+            if (group == null)
+            {
+                return NotFound();
+            }
+
+            return View(group);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int Id, Group group)
+        {
+            if (Id != group.Id)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(group);
+            }
+
+            await _uow.GroupRepository.UpdateAsync(group);
+            int editResult = await _uow.SaveAsync();
+
+            if (editResult > 0)
+            {
+                TempData["success"] = "Grupo editado con exito";
+            }
+            else
+            {
+                TempData["error"] = "Error al editar grupo";
+            }
+
+            return RedirectToAction("Index", "Group");
+        }
+
 
     }
 }
