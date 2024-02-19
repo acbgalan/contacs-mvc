@@ -121,6 +121,22 @@ namespace Contacts.Web.Controllers
             return RedirectToAction("Index", "Group");
         }
 
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var group = await _uow.GroupRepository.GetAsync((int)id);
+
+            if (group == null)
+            {
+                return NotFound();
+            }
+
+            return View(group);
+        }
 
     }
 }
