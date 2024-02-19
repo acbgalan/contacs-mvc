@@ -27,7 +27,7 @@ namespace Contacts.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([FromBody] Group group)
+        public async Task<IActionResult> Create([FromForm] Group group)
         {
             if (!ModelState.IsValid)
             {

@@ -27,7 +27,7 @@ namespace Contacts.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([FromBody] Contact contact)
+        public async Task<IActionResult> Create([FromForm] Contact contact)
         {
             if(!ModelState.IsValid)
             {
