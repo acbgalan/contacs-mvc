@@ -1,0 +1,46 @@
+﻿@model Contacts.Models.Contact
+
+@{
+    ViewData["Title"] = "Nuevo contacto";
+}
+
+<h1>Nuevo contacto</h1>
+
+<form asp-controller="Contact" asp-action="Create" method="post">
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <small class="text-danger">
+            <span asp-validation-for="Name"></span>
+        </small>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Phone"></label>
+        <input asp-for="Phone" pattern="[0-9]{3}-[0-9]{9}" class="form-control" placeholder="Format: 123-123456789" />
+        <small class="text-danger">
+            <span asp-validation-for="Phone"></span>
+        </small>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <small class="text-danger">
+            <span asp-validation-for="Email"></span>
+        </small>
+
+        @* <i class="bi bi-exclamation-circle"></i> *@
+
+    </div>
+    <div class="row mb-3">
+        <div class="col-6 col-md-3 col-xl-2">
+            <input type="submit" class="btn btn-primary w-100" value="Guardar" />
+        </div>
+        <div class="col-6 col-md-3 col-xl-2">
+            <a asp-controller="Contact" asp-action="Index" class="btn btn-secondary w-100">Volver</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

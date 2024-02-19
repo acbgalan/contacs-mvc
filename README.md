@@ -10,3 +10,6 @@ Entity Framework
 	Relationships (Many-to-many)
 	Migrations
 	Seed data
+
+Web mvc
+	Notifications with bootstrap alerts
