@@ -49,6 +49,23 @@ namespace Contacts.Web.Controllers
             return RedirectToAction("Index", "Contact");
         }
 
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var contact = await _uof.ContactRepository.GetAsync((int)id);
+
+            if (contact == null)
+            {
+                return NotFound();
+            }
+
+            return View(contact);
+        }
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -70,12 +87,12 @@ namespace Contacts.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [FromForm] Contact contact)
         {
-            if(id != contact.Id)
+            if (id != contact.Id)
             {
                 return BadRequest();
             }
 
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(contact);
             }
@@ -95,6 +112,31 @@ namespace Contacts.Web.Controllers
             return RedirectToAction("Index", "Contact");
         }
 
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var contact = await _uof.ContactRepository.GetAsync(id);
+
+            if(contact == null)
+            {
+                return NotFound();
+            }
+
+            await _uof.ContactRepository.DeleteAsync(contact);
+            int deleteResult = await _uof.SaveAsync();
+
+            if (deleteResult > 0)
+            {
+                TempData["success"] = "Contacto borrado con exito";
+            }
+            else
+            {
+                TempData["error"] = "Error al borrar contacto";
+            }
+
+            return RedirectToAction("Index", "Contact");
+        }
 
     }
 }

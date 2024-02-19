@@ -1,0 +1,25 @@
+﻿@model Contacts.Models.Contact
+
+@{
+    ViewData["Title"] = "Detalles contacto";
+}
+
+<h1>Detalles contacto</h1>
+
+<div class="mb-3">
+    <label asp-for="Name" class="form-label"></label>
+    <input asp-for="Name" class="form-control" disabled />
+</div>
+<div class="mb-3">
+    <label asp-for="Phone"></label>
+    <input asp-for="Phone" pattern="[0-9]{3}-[0-9]{9}" class="form-control" placeholder="Format: 123-123456789" disabled/>
+</div>
+<div class="mb-3">
+    <label asp-for="Email" class="form-label"></label>
+    <input asp-for="Email" class="form-control" disabled />
+</div>
+<div class="row mb-3">
+    <div class="col-6 col-md-3 col-xl-2">
+        <a asp-controller="Contact" asp-action="Index" class="btn btn-secondary w-100">Volver</a>
+    </div>
+</div>
