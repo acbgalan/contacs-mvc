@@ -94,7 +94,7 @@ namespace Contacts.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int Id, Group group)
+        public async Task<IActionResult> Edit(int Id, [FromForm] Group group)
         {
             if (Id != group.Id)
             {
