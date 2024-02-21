@@ -1,5 +1,6 @@
 ﻿using Contacts.DataAccess.Repository.Contracts;
 using Contacts.Models;
+using Contacts.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Contacts.Web.Controllers
@@ -20,18 +21,43 @@ namespace Contacts.Web.Controllers
             return View(contacts);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var groups = await _uof.GroupRepository.GetAllAsync();
+
+            ContactVM contactVM = new ContactVM()
+            {
+                Contact = new Contact(),
+                CategoryCheckList = groups.OrderBy(x => x.Name).Select(x => new CheckboxVM
+                {
+                    Id = x.Id,
+                    LabelName = x.Name,
+                    IsChecked = false
+                })
+            };
+
+            return View(contactVM);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([FromForm] Contact contact)
+        public async Task<IActionResult> Create(IFormCollection form)
         {
-            if (!ModelState.IsValid)
+            Contact contact = new Contact
             {
-                return View();
+                Name = form["Contact.Name"],
+                Phone = form["Contact.Phone"],
+                Email = form["Contact.Email"],
+                Groups = new List<Group>()
+            };
+
+            foreach (var key in form.Keys)
+            {
+                if (key.StartsWith("cat-"))
+                {
+                    int groupId = int.Parse(form[key]);
+                    contact.Groups.Add(await _uof.GroupRepository.GetAsync(groupId));
+                }
             }
 
             await _uof.ContactRepository.AddAsync(contact);
@@ -118,7 +144,7 @@ namespace Contacts.Web.Controllers
         {
             var contact = await _uof.ContactRepository.GetAsync(id);
 
-            if(contact == null)
+            if (contact == null)
             {
                 return NotFound();
             }
