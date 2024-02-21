@@ -89,7 +89,26 @@ namespace Contacts.Web.Controllers
                 return NotFound();
             }
 
-            return View(contact);
+            var groups = await _uof.GroupRepository.GetAllAsync();
+
+            ContactVM contactVM = new ContactVM
+            {
+                Contact = new Contact
+                {
+                    Id = contact.Id,
+                    Name = contact.Name,
+                    Phone = contact.Phone,
+                    Email = contact.Email
+                },
+                CategoryCheckList = groups.OrderBy(x => x.Name).Select(x => new CheckboxVM
+                {
+                    Id = x.Id,
+                    LabelName = x.Name,
+                    IsChecked = contact.Groups.Any(g => g.Id == x.Id)
+                })
+            };
+
+            return View(contactVM);
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -135,14 +154,14 @@ namespace Contacts.Web.Controllers
             int formId;
             int.TryParse(form["Contact.Id"], out formId);
 
-            if(id != formId)
+            if (id != formId)
             {
                 return BadRequest();
             }
 
-            var contact2Edit =  await _uof.ContactRepository.GetAsync(id);
+            var contact2Edit = await _uof.ContactRepository.GetAsync(id);
 
-            if(contact2Edit == null)
+            if (contact2Edit == null)
             {
                 return NotFound();
             }
