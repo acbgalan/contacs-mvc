@@ -1,5 +1,6 @@
 ﻿using Contacts.DataAccess.Repository.Contracts;
 using Contacts.Models;
+using Contacts.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Contacts.Web.Controllers
@@ -20,18 +21,43 @@ namespace Contacts.Web.Controllers
             return View(contacts);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var groups = await _uof.GroupRepository.GetAllAsync();
+
+            ContactVM contactVM = new ContactVM()
+            {
+                Contact = new Contact(),
+                CategoryCheckList = groups.OrderBy(x => x.Name).Select(x => new CheckboxVM
+                {
+                    Id = x.Id,
+                    LabelName = x.Name,
+                    IsChecked = false
+                })
+            };
+
+            return View(contactVM);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([FromForm] Contact contact)
+        public async Task<IActionResult> Create(IFormCollection form)
         {
-            if (!ModelState.IsValid)
+            Contact contact = new Contact
             {
-                return View();
+                Name = form["Contact.Name"],
+                Phone = form["Contact.Phone"],
+                Email = form["Contact.Email"],
+                Groups = new List<Group>()
+            };
+
+            foreach (var key in form.Keys)
+            {
+                if (key.StartsWith("cat-"))
+                {
+                    int groupId = int.Parse(form[key]);
+                    contact.Groups.Add(await _uof.GroupRepository.GetAsync(groupId));
+                }
             }
 
             await _uof.ContactRepository.AddAsync(contact);
@@ -63,7 +89,26 @@ namespace Contacts.Web.Controllers
                 return NotFound();
             }
 
-            return View(contact);
+            var groups = await _uof.GroupRepository.GetAllAsync();
+
+            ContactVM contactVM = new ContactVM
+            {
+                Contact = new Contact
+                {
+                    Id = contact.Id,
+                    Name = contact.Name,
+                    Phone = contact.Phone,
+                    Email = contact.Email
+                },
+                CategoryCheckList = groups.OrderBy(x => x.Name).Select(x => new CheckboxVM
+                {
+                    Id = x.Id,
+                    LabelName = x.Name,
+                    IsChecked = contact.Groups.Any(g => g.Id == x.Id)
+                })
+            };
+
+            return View(contactVM);
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -80,24 +125,62 @@ namespace Contacts.Web.Controllers
                 return NotFound();
             }
 
-            return View(contact);
+            var groups = await _uof.GroupRepository.GetAllAsync();
+
+            ContactVM contactVM = new ContactVM()
+            {
+                Contact = new Contact
+                {
+                    Id = contact.Id,
+                    Name = contact.Name,
+                    Phone = contact.Phone,
+                    Email = contact.Email
+                },
+                CategoryCheckList = groups.OrderBy(x => x.Name).Select(x => new CheckboxVM
+                {
+                    Id = x.Id,
+                    LabelName = x.Name,
+                    IsChecked = contact.Groups.Any(g => g.Id == x.Id)
+                })
+            };
+
+            return View(contactVM);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [FromForm] Contact contact)
+        public async Task<IActionResult> Edit(int id, IFormCollection form)
         {
-            if (id != contact.Id)
+            int formId;
+            int.TryParse(form["Contact.Id"], out formId);
+
+            if (id != formId)
             {
                 return BadRequest();
             }
 
-            if (!ModelState.IsValid)
+            var contact2Edit = await _uof.ContactRepository.GetAsync(id);
+
+            if (contact2Edit == null)
             {
-                return View(contact);
+                return NotFound();
             }
 
-            await _uof.ContactRepository.UpdateAsync(contact);
+            contact2Edit.Name = form["Contact.Name"];
+            contact2Edit.Phone = form["Contact.Phone"];
+            contact2Edit.Email = form["Contact.Email"];
+            contact2Edit.Groups.Clear();
+
+            foreach (var key in form.Keys)
+            {
+                if (key.StartsWith("cat-"))
+                {
+                    int groupId = int.Parse(form[key]);
+                    contact2Edit.Groups.Add(await _uof.GroupRepository.GetAsync(groupId));
+                }
+            }
+
+            await _uof.ContactRepository.UpdateAsync(contact2Edit);
             int editResult = await _uof.SaveAsync();
 
             if (editResult > 0)
@@ -118,7 +201,7 @@ namespace Contacts.Web.Controllers
         {
             var contact = await _uof.ContactRepository.GetAsync(id);
 
-            if(contact == null)
+            if (contact == null)
             {
                 return NotFound();
             }
