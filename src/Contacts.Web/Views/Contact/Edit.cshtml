@@ -33,10 +33,10 @@
     </div>
     <div class="mb-1">Grupos</div>
     <div class="form-check mb-3">
-        @foreach (var item in Model.CategoryCheckList)
+        @foreach (var group in Model.GroupCheckList)
         {
-            <input type="checkbox" id="cat-@item.Id" name="cat-@item.Id" value="@item.Id" @(item.IsChecked ? "checked" : "") class="form-check-input" />
-            <label for="cat-@item.Id" class="form-check-label">@item.LabelName</label>
+            <input type="checkbox" id="grp-@group.Id" name="grp-@group.Id" value="@group.Id" @(group.IsChecked ? "checked" : "") class="form-check-input" />
+            <label for="grp-@group.Id" class="form-check-label">@group.LabelName</label>
             <br />
         }
     </div>

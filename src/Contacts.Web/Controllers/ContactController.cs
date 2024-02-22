@@ -28,7 +28,7 @@ namespace Contacts.Web.Controllers
             ContactVM contactVM = new ContactVM()
             {
                 Contact = new Contact(),
-                CategoryCheckList = groups.OrderBy(x => x.Name).Select(x => new CheckboxVM
+                GroupCheckList = groups.OrderBy(x => x.Name).Select(x => new CheckboxVM
                 {
                     Id = x.Id,
                     LabelName = x.Name,
@@ -100,7 +100,7 @@ namespace Contacts.Web.Controllers
                     Phone = contact.Phone,
                     Email = contact.Email
                 },
-                CategoryCheckList = groups.OrderBy(x => x.Name).Select(x => new CheckboxVM
+                GroupCheckList = groups.OrderBy(x => x.Name).Select(x => new CheckboxVM
                 {
                     Id = x.Id,
                     LabelName = x.Name,
@@ -136,7 +136,7 @@ namespace Contacts.Web.Controllers
                     Phone = contact.Phone,
                     Email = contact.Email
                 },
-                CategoryCheckList = groups.OrderBy(x => x.Name).Select(x => new CheckboxVM
+                GroupCheckList = groups.OrderBy(x => x.Name).Select(x => new CheckboxVM
                 {
                     Id = x.Id,
                     LabelName = x.Name,
@@ -173,7 +173,7 @@ namespace Contacts.Web.Controllers
 
             foreach (var key in form.Keys)
             {
-                if (key.StartsWith("cat-"))
+                if (key.StartsWith("grp-"))
                 {
                     int groupId = int.Parse(form[key]);
                     contact2Edit.Groups.Add(await _uof.GroupRepository.GetAsync(groupId));

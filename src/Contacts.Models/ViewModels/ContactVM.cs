@@ -9,6 +9,6 @@ namespace Contacts.Models.ViewModels
     public class ContactVM
     {
         public Contact Contact { get; set; }
-        public IEnumerable<CheckboxVM> CategoryCheckList { get; set; }
+        public IEnumerable<CheckboxVM> GroupCheckList { get; set; }
     }
 }
