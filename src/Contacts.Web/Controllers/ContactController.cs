@@ -43,6 +43,7 @@ namespace Contacts.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ContactVM contactVM)
         {
+            //Validations
             if (!ModelState.IsValid)
             {
                 var groups = await _uof.GroupRepository.GetAllAsync();
@@ -57,6 +58,7 @@ namespace Contacts.Web.Controllers
                 return View(contactVM);
             }
 
+            //Save new contact
             Contact newContact = contactVM.Contact;
 
             if (contactVM.CheckedGroups != null)
@@ -158,47 +160,56 @@ namespace Contacts.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, IFormCollection form)
+        public async Task<IActionResult> Edit(int id, ContactVM contactVM)
         {
-            int formId;
-            int.TryParse(form["Contact.Id"], out formId);
-
-            if (id != formId)
+            //Validations
+            if (id != contactVM.Contact.Id)
             {
                 return BadRequest();
             }
 
-            var contact2Edit = await _uof.ContactRepository.GetAsync(id);
-
-            if (contact2Edit == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                var groups = await _uof.GroupRepository.GetAllAsync();
+
+                contactVM.GroupCheckList = groups.OrderBy(x => x.Name).Select(x => new CheckboxVM
+                {
+                    Id = x.Id,
+                    LabelName = x.Name,
+                    IsChecked = contactVM.CheckedGroups != null ? contactVM.CheckedGroups.Contains(x.Id) : false
+                });
+
+                return View(contactVM);
             }
 
-            contact2Edit.Name = form["Contact.Name"];
-            contact2Edit.Phone = form["Contact.Phone"];
-            contact2Edit.Email = form["Contact.Email"];
+            //Save edit contact
+            Contact contact2Edit = await _uof.ContactRepository.GetAsync(id);
+            contact2Edit.Name = contactVM.Contact.Name;
+            contact2Edit.Phone = contactVM.Contact.Phone;
+            contact2Edit.Email = contactVM.Contact.Email;
+
             contact2Edit.Groups.Clear();
 
-            foreach (var key in form.Keys)
+            if (contactVM.CheckedGroups != null)
             {
-                if (key.StartsWith("grp-"))
+                contact2Edit.Groups = new List<Group>();
+
+                foreach (var groupId in contactVM.CheckedGroups)
                 {
-                    int groupId = int.Parse(form[key]);
                     contact2Edit.Groups.Add(await _uof.GroupRepository.GetAsync(groupId));
                 }
             }
 
             await _uof.ContactRepository.UpdateAsync(contact2Edit);
-            int editResult = await _uof.SaveAsync();
+            int saveResult = await _uof.SaveAsync();
 
-            if (editResult > 0)
+            if (saveResult > 0)
             {
-                TempData["success"] = "Contacto editado con exito";
+                TempData["success"] = "Contacto creado con exito";
             }
             else
             {
-                TempData["error"] = "Error al editar contacto";
+                TempData["error"] = "Error al crear contacto";
             }
 
             return RedirectToAction("Index", "Contact");
