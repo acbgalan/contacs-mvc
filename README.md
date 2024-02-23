@@ -11,5 +11,7 @@ Entity Framework
 	Migrations
 	Seed data
 
-Web mvc
+Web MVC
 	Notifications with bootstrap alerts
+	Multiple checkbox dinamically. Contact-Groups
+	
