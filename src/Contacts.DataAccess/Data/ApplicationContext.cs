@@ -18,6 +18,7 @@ namespace Contacts.DataAccess.Data
 
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Group> Groups { get; set; }
+        public DbSet<Website> Websites { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
