@@ -109,7 +109,9 @@ namespace Contacts.Web.Controllers
                     Id = contact.Id,
                     Name = contact.Name,
                     Phone = contact.Phone,
-                    Email = contact.Email
+                    Email = contact.Email,
+                    Alias = contact.Alias,
+                    Notes = contact.Notes
                 },
                 GroupCheckList = groups.OrderBy(x => x.Name).Select(x => new CheckboxVM
                 {

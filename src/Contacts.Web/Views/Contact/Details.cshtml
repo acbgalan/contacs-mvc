@@ -6,27 +6,48 @@
 
 <h1>Detalles contacto</h1>
 
-<div class="mb-3">
-    <label asp-for="Contact.Name" class="form-label"></label>
-    <input asp-for="Contact.Name" class="form-control" disabled />
+<div class="row">
+    <div class="col-12 col-md-6 mb-3">
+        <label asp-for="Contact.Name" class="form-label"></label>
+        <input asp-for="Contact.Name" class="form-control" disabled />
+    </div>
+    <div class="col-12 col-md-6 mb-3">
+        <label asp-for="Contact.Alias" class="form-label"></label>
+        <input asp-for="Contact.Alias" class="form-control" disabled />
+    </div>
 </div>
-<div class="mb-3">
-    <label asp-for="Contact.Phone"></label>
-    <input asp-for="Contact.Phone" pattern="[0-9]{3}-[0-9]{9}" class="form-control" placeholder="Format: 123-123456789" disabled />
+<div class="row">
+    <div class="col-12 col-md-6 mb-3">
+        <label asp-for="Contact.Phone"></label>
+        <input asp-for="Contact.Phone" pattern="[0-9]{3}-[0-9]{9}" class="form-control" placeholder="Format: 123-123456789" disabled />
+    </div>
+    <div class="col-12 col-md-6 mb-3">
+        <label asp-for="Contact.Email" class="form-label"></label>
+        <input asp-for="Contact.Email" class="form-control" disabled />
+    </div>
 </div>
-<div class="mb-3">
-    <label asp-for="Contact.Email" class="form-label"></label>
-    <input asp-for="Contact.Email" class="form-control" disabled />
+<div class="row">
+    <div class="col-12 col-md-6 mb-3">
+        <div class="mb-1">Grupos</div>
+        <div class="form-check mb-3">
+            @foreach (var group in Model.GroupCheckList)
+            {
+                <input type="checkbox" id="grp-@group.Id" value="@group.Id" @(group.IsChecked ? "checked" : "") class="form-check-input" disabled />
+                <label for="grp-@group.Id" class="form-check-label">@group.LabelName</label>
+                <br />
+            }
+        </div>
+    </div>
+    <div class="col-12 col-md-6 mb-3">
+        <div class="mb-3">
+            <label asp-for="Contact.Notes" class="form-label"></label>
+            <textarea asp-for="Contact.Notes" class="form-control" disabled></textarea>
+        </div>
+    </div>
+
 </div>
-<div class="mb-1">Grupos</div>
-<div class="form-check mb-3">
-    @foreach (var group in Model.GroupCheckList)
-    {
-        <input type="checkbox" id="grp-@group.Id" value="@group.Id" @(group.IsChecked ? "checked" : "") class="form-check-input" disabled />
-        <label for="grp-@group.Id" class="form-check-label">@group.LabelName</label>
-        <br />
-    }
-</div>
+
+
 <div class="row mb-3">
     <div class="col-6 col-md-3 col-xl-2">
         <a asp-controller="Contact" asp-action="Index" class="btn btn-secondary w-100">Volver</a>
