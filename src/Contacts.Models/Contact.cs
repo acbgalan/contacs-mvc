@@ -19,12 +19,22 @@ namespace Contacts.Models
         [DisplayName("Nombre")]
         public string Name { get; set; }
 
+        [StringLength(50, ErrorMessage = "{0} tiene un tamaño máximo de {1} caracteres")]
+        public string Alias { get; set; }
+
         [Phone]
+        [DisplayName("Teléfono")]
         public string Phone { get; set; }
 
         [EmailAddress]
+        [DisplayName("Correo electrónico")]
         public string Email { get; set; }
 
+        [StringLength(500, ErrorMessage = "{0} tiene un tamaño máximo de {1} caracteres")]
+        [DisplayName("Notas")]
+        public string Notes { get; set; }
+
         public List<Group> Groups { get; set; }
+        public List<Website> Websites { get; set; }
     }
 }

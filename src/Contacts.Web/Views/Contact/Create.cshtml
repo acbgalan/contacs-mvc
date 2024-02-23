@@ -47,6 +47,25 @@
             <a asp-controller="Contact" asp-action="Index" class="btn btn-secondary w-100">Volver</a>
         </div>
     </div>
+    @* Extended properties *@
+    <div class="mb-3">
+        <label asp-for="Contact.Alias" class="form-label"></label>
+        <input asp-for="Contact.Alias" class="form-control" />
+        <small>
+            <span asp-validation-for="Contact.Alias"></span>
+        </small>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Contact.Notes" class="form-label"></label>
+        <textarea asp-for="Contact.Notes" class="form-control"></textarea>
+    </div>
+    <div class="mb-3">
+        <div class="mb-1">Sitios web</div>
+        @* 2 options for add websites
+            - URLS separated with ','
+            -> Work with JS and add inputs filed dinamically            
+        *@
+    </div>
 </form>
 
 @section Scripts {
