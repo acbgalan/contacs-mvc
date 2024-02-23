@@ -10,5 +10,6 @@ namespace Contacts.Models.ViewModels
     {
         public Contact Contact { get; set; }
         public IEnumerable<CheckboxVM> GroupCheckList { get; set; }
+        public IEnumerable<int> CheckedGroups { get; set; }
     }
 }
