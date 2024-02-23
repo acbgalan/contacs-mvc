@@ -34,7 +34,7 @@
     <div class="form-check mb-3">        
         @foreach (var group in Model.GroupCheckList)
         {
-            <input type="checkbox" id="grp-@group.Id" name="grp-@group.Id" value="@group.Id" @(group.IsChecked ? "checked" : "") class="form-check-input" />
+            <input type="checkbox" id="grp-@group.Id" name="CheckedGroups" value="@group.Id" @(group.IsChecked ? "checked" : "") class="form-check-input" />
             <label for="grp-@group.Id" class="form-check-label">@group.LabelName</label>
             <br />
         }

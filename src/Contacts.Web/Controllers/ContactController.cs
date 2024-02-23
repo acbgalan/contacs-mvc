@@ -41,26 +41,35 @@ namespace Contacts.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(IFormCollection form)
+        public async Task<IActionResult> Create(ContactVM contactVM)
         {
-            Contact contact = new Contact
+            if (!ModelState.IsValid)
             {
-                Name = form["Contact.Name"],
-                Phone = form["Contact.Phone"],
-                Email = form["Contact.Email"],
-                Groups = new List<Group>()
-            };
+                var groups = await _uof.GroupRepository.GetAllAsync();
 
-            foreach (var key in form.Keys)
-            {
-                if (key.StartsWith("cat-"))
+                contactVM.GroupCheckList = groups.OrderBy(x => x.Name).Select(x => new CheckboxVM
                 {
-                    int groupId = int.Parse(form[key]);
-                    contact.Groups.Add(await _uof.GroupRepository.GetAsync(groupId));
+                    Id = x.Id,
+                    LabelName = x.Name,
+                    IsChecked = contactVM.CheckedGroups != null ? contactVM.CheckedGroups.Contains(x.Id) : false
+                });
+
+                return View(contactVM);
+            }
+
+            Contact newContact = contactVM.Contact;
+
+            if (contactVM.CheckedGroups != null)
+            {
+                newContact.Groups = new List<Group>();
+
+                foreach (var groupId in contactVM.CheckedGroups)
+                {
+                    newContact.Groups.Add(await _uof.GroupRepository.GetAsync(groupId));
                 }
             }
 
-            await _uof.ContactRepository.AddAsync(contact);
+            await _uof.ContactRepository.AddAsync(newContact);
             int saveResult = await _uof.SaveAsync();
 
             if (saveResult > 0)
