@@ -8,37 +8,67 @@
 
 <form asp-controller="Contact" asp-action="Edit" method="post">
     <input type="hidden" asp-for="Contact.Id" />
-    <div class="mb-3">
-        <label asp-for="Contact.Name" class="form-label"></label>
-        <input asp-for="Contact.Name" class="form-control" />
-        <small class="text-danger">
-            <span asp-validation-for="Contact.Name"></span>
-        </small>
+    <div class="row">
+        <div class="col-12 col-md-6 mb-3">
+            <label asp-for="Contact.Name" class="form-label"></label>
+            <input asp-for="Contact.Name" class="form-control" />
+            <small class="text-danger">
+                <span asp-validation-for="Contact.Name"></span>
+            </small>
+        </div>
+        <div class="col-12 col-md-6 mb-3">
+            <label asp-for="Contact.Alias" class="form-label"></label>
+            <input asp-for="Contact.Alias" class="form-control" />
+            <small>
+                <span asp-validation-for="Contact.Alias"></span>
+            </small>
+        </div>
     </div>
-    <div class="mb-3">
-        <label asp-for="Contact.Phone"></label>
-        <input asp-for="Contact.Phone" pattern="[0-9]{3}-[0-9]{9}" class="form-control" placeholder="Format: 123-123456789" />
-        <small class="text-danger">
-            <span asp-validation-for="Contact.Phone"></span>
-        </small>
+    <div class="row">
+        <div class="col-12 col-md-6 mb-3">
+            <label asp-for="Contact.Phone" class="form-label"></label>
+            <input asp-for="Contact.Phone" class="form-control" pattern="[0-9]{3}-[0-9]{9}" class="form-control" placeholder="Format: 123-123456789" />
+            <small class="text-danger">
+                <span asp-validation-for="Contact.Phone"></span>
+            </small>
+        </div>
+        <div class="col-12 col-md-6 mb-3">
+            <label asp-for="Contact.Email" class="form-label"></label>
+            <input asp-for="Contact.Email" class="form-control" />
+            <small class="text-danger">
+                <span asp-validation-for="Contact.Email"></span>
+            </small>
+            @* <i class="bi bi-exclamation-circle"></i> *@
+        </div>
     </div>
-    <div class="mb-3">
-        <label asp-for="Contact.Email" class="form-label"></label>
-        <input asp-for="Contact.Email" class="form-control" />
-        <small class="text-danger">
-            <span asp-validation-for="Contact.Email"></span>
-        </small>
+    <div class="row">
+        <div class="col-12 col-md-6 mb-3">
+            <div class="mb-1">Grupos</div>
+            <div class="form-check mb-3">
+                @foreach (var group in Model.GroupCheckList)
+                {
+                    <input type="checkbox" id="grp-@group.Id" name="CheckedGroups" value="@group.Id" @(group.IsChecked ? "checked" : "") class="form-check-input" />
+                    <label for="grp-@group.Id" class="form-check-label">@group.LabelName</label>
+                    <br />
+                }
+            </div>
+        </div>
+        <div class="col-12 col-md-6 mb-3">
+            <div class="mb-3">
+                <label asp-for="Contact.Notes" class="form-label"></label>
+                <textarea asp-for="Contact.Notes" class="form-control"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="mb-3">
+            <div class="mb-1">Sitios web</div>
+            @* 2 options for add websites
+            - URLS separated with ','
+            -> Work with JS and add inputs filed dinamically
+            *@
 
-        @* <i class="bi bi-exclamation-circle"></i> *@
-    </div>
-    <div class="mb-1">Grupos</div>
-    <div class="form-check mb-3">
-        @foreach (var group in Model.GroupCheckList)
-        {
-            <input type="checkbox" id="grp-@group.Id" name="CheckedGroups" value="@group.Id" @(group.IsChecked ? "checked" : "") class="form-check-input" />
-            <label for="grp-@group.Id" class="form-check-label">@group.LabelName</label>
-            <br />
-        }
+        </div>
     </div>
     <div class="row mb-3">
         <div class="col-6 col-md-3 col-xl-2">
@@ -53,4 +83,3 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
-

@@ -20,10 +20,6 @@ namespace Contacts.Models
         [DisplayName("URL")]
         public string Url { get; set; }
 
-        [StringLength(250, ErrorMessage = "{0} tiene un tamaño máximo de {1} caracteres")]
-        [DisplayName("Descripción")]
-        public string Description { get; set; }
-
         [ForeignKey("Contact")]
         public int ContactId { get; set; }
 

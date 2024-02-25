@@ -7,37 +7,87 @@
 <h1>Nuevo contacto</h1>
 
 <form asp-controller="Contact" asp-action="Create" method="post">
-    <div class="mb-3">
-        <label asp-for="Contact.Name" class="form-label"></label>
-        <input asp-for="Contact.Name" class="form-control" />
-        <small class="text-danger">
-            <span asp-validation-for="Contact.Name"></span>
-        </small>
+    <div class="row">
+        <div class="col-12 col-md-6 mb-3">
+            <label asp-for="Contact.Name" class="form-label"></label>
+            <input asp-for="Contact.Name" class="form-control" />
+            <small class="text-danger">
+                <span asp-validation-for="Contact.Name"></span>
+            </small>
+        </div>
+        <div class="col-12 col-md-6 mb-3">
+            <label asp-for="Contact.Alias" class="form-label"></label>
+            <input asp-for="Contact.Alias" class="form-control" />
+            <small>
+                <span asp-validation-for="Contact.Alias"></span>
+            </small>
+        </div>
     </div>
-    <div class="mb-3">
-        <label asp-for="Contact.Phone"></label>
-        <input asp-for="Contact.Phone" pattern="[0-9]{3}-[0-9]{9}" class="form-control" placeholder="Format: 123-123456789" />
-        <small class="text-danger">
-            <span asp-validation-for="Contact.Phone"></span>
-        </small>
+    <div class="row">
+        <div class="col-12 col-md-6 mb-3">
+            <label asp-for="Contact.Phone" class="form-label"></label>
+            <input asp-for="Contact.Phone" class="form-control" pattern="[0-9]{3}-[0-9]{9}" class="form-control" placeholder="Format: 123-123456789" />
+            <small class="text-danger">
+                <span asp-validation-for="Contact.Phone"></span>
+            </small>
+        </div>
+        <div class="col-12 col-md-6 mb-3">
+            <label asp-for="Contact.Email" class="form-label"></label>
+            <input asp-for="Contact.Email" class="form-control" />
+            <small class="text-danger">
+                <span asp-validation-for="Contact.Email"></span>
+            </small>
+            @* <i class="bi bi-exclamation-circle"></i> *@
+        </div>
     </div>
-    <div class="mb-3">
-        <label asp-for="Contact.Email" class="form-label"></label>
-        <input asp-for="Contact.Email" class="form-control" />
-        <small class="text-danger">
-            <span asp-validation-for="Contact.Email"></span>
-        </small>
-
-        @* <i class="bi bi-exclamation-circle"></i> *@
+    <div class="row">
+        <div class="col-12 col-md-6 mb-3">
+            <div class="mb-1">Grupos</div>
+            <div class="form-check mb-3">
+                @foreach (var group in Model.GroupCheckList)
+                {
+                    <input type="checkbox" id="grp-@group.Id" name="CheckedGroups" value="@group.Id" @(group.IsChecked ? "checked" : "") class="form-check-input" />
+                    <label for="grp-@group.Id" class="form-check-label">@group.LabelName</label>
+                    <br />
+                }
+            </div>
+        </div>
+        <div class="col-12 col-md-6 mb-3">
+            <div class="mb-3">
+                <label asp-for="Contact.Notes" class="form-label"></label>
+                <textarea asp-for="Contact.Notes" class="form-control"></textarea>
+            </div>
+        </div>
     </div>
-    <div class="mb-1">Grupos</div>
-    <div class="form-check mb-3">        
-        @foreach (var group in Model.GroupCheckList)
-        {
-            <input type="checkbox" id="grp-@group.Id" name="CheckedGroups" value="@group.Id" @(group.IsChecked ? "checked" : "") class="form-check-input" />
-            <label for="grp-@group.Id" class="form-check-label">@group.LabelName</label>
-            <br />
-        }
+    <div class="row">
+        <div class="mb-3">
+            <div class="mb-1">Sitios web</div>
+            <div id="websites">
+                @if (Model.InputWebsites != null)
+                {
+                    foreach (var url in Model.InputWebsites)
+                    {
+                        <div class="row">
+                            <div class="col-12 col-md-6 mb-3">
+                                <input type="url" value="@url" class="form-control" readonly />
+                                <input type="hidden" name="InputWebsites" value="@url" />
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <button type="button" class="btn btn-outline-danger" onclick="removeWebsite()">Quitar</button>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-6 mb-3">
+                    <input type="url" id="url" class="form-control" />
+                </div>
+                <div class="col-12 col-md-6">
+                    <button type="button" class="btn btn-outline-primary" id="addwebsitebtn">Añadir</button>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="row mb-3">
         <div class="col-6 col-md-3 col-xl-2">
@@ -47,27 +97,45 @@
             <a asp-controller="Contact" asp-action="Index" class="btn btn-secondary w-100">Volver</a>
         </div>
     </div>
-    @* Extended properties *@
-    <div class="mb-3">
-        <label asp-for="Contact.Alias" class="form-label"></label>
-        <input asp-for="Contact.Alias" class="form-control" />
-        <small>
-            <span asp-validation-for="Contact.Alias"></span>
-        </small>
-    </div>
-    <div class="mb-3">
-        <label asp-for="Contact.Notes" class="form-label"></label>
-        <textarea asp-for="Contact.Notes" class="form-control"></textarea>
-    </div>
-    <div class="mb-3">
-        <div class="mb-1">Sitios web</div>
-        @* 2 options for add websites
-            - URLS separated with ','
-            -> Work with JS and add inputs filed dinamically            
-        *@
-    </div>
 </form>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('addwebsitebtn').addEventListener('click', addWebsite);
+        });
+
+        function addWebsite() {
+            const inputUrl = document.getElementById('url');
+
+            if (inputUrl.value != '') {
+                const websites = document.getElementById('websites');
+
+                websites.innerHTML += `
+                                                            <div class="row">
+                                                                <div class="col-12 col-md-6 mb-3">
+                                                                            <input type="url" value="${inputUrl.value}" class="form-control" readonly/>
+                                                                            <input type="hidden" name="InputWebsites" value="${inputUrl.value}"/>
+                                                                </div>
+                                                                <div class="col-12 col-md-6">
+                                                                            <button type="button" class="btn btn-outline-danger" onclick="removeWebsite()">Quitar</button>
+                                                                </div>
+                                                            </div>`;
+                inputUrl.value = '';
+            }
+        }
+
+        function removeWebsite() {
+            // Get the button that triggered the event
+            var button = event.target;
+
+            // Get the parent element of the button (the div with class row)
+            var rowDiv = button.closest('.row');
+
+            // Remove the div with class row
+            rowDiv.remove();
+        }
+    </script>
 }
