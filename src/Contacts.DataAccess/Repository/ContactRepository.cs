@@ -27,7 +27,10 @@ namespace Contacts.DataAccess.Repository
 
         public async Task<Contact> GetAsync(int id)
         {
-            return await _context.Contacts.Include(c => c.Groups).FirstOrDefaultAsync(c => c.Id == id);
+            return await _context.Contacts
+                .Include(g => g.Groups)
+                .Include(w => w.Websites)
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<List<Contact>> GetAllAsync()
