@@ -162,7 +162,8 @@ namespace Contacts.Web.Controllers
                     Phone = contact.Phone,
                     Email = contact.Email,
                     Alias = contact.Alias,
-                    Notes = contact.Notes
+                    Notes = contact.Notes,
+                    Websites = contact.Websites
                 },
                 GroupCheckList = groups.OrderBy(x => x.Name).Select(x => new CheckboxVM
                 {
@@ -199,7 +200,7 @@ namespace Contacts.Web.Controllers
                 return View(contactVM);
             }
 
-            //Save edit contact
+            //Save contact
             Contact contact2Edit = await _uof.ContactRepository.GetAsync(id);
             contact2Edit.Name = contactVM.Contact.Name;
             contact2Edit.Phone = contactVM.Contact.Phone;
@@ -207,6 +208,7 @@ namespace Contacts.Web.Controllers
             contact2Edit.Alias = contactVM.Contact.Alias;
             contact2Edit.Notes = contactVM.Contact.Notes;
 
+            //Add groups to contact
             contact2Edit.Groups.Clear();
 
             if (contactVM.CheckedGroups != null)
@@ -216,6 +218,22 @@ namespace Contacts.Web.Controllers
                 foreach (var groupId in contactVM.CheckedGroups)
                 {
                     contact2Edit.Groups.Add(await _uof.GroupRepository.GetAsync(groupId));
+                }
+            }
+
+            //Add websites to contact
+            contact2Edit.Websites.Clear();
+
+            if (contactVM.InputWebsites != null)
+            {
+                contact2Edit.Websites = new List<Website>();
+
+                foreach (var url in contactVM.InputWebsites)
+                {
+                    contact2Edit.Websites.Add(new Website
+                    {
+                        Url = url
+                    });
                 }
             }
 
