@@ -4,7 +4,7 @@
     ViewData["Title"] = "Editar contacto";
 }
 
-<h1>Editar contacto</h1>
+<h1>Editar contacto #@Model.Contact.Id</h1>
 
 <form asp-controller="Contact" asp-action="Edit" method="post">
     <input type="hidden" asp-for="Contact.Id" />
@@ -63,11 +63,31 @@
     <div class="row">
         <div class="mb-3">
             <div class="mb-1">Sitios web</div>
-            @* 2 options for add websites
-            - URLS separated with ','
-            -> Work with JS and add inputs filed dinamically
-            *@
-
+            <div id="websites">
+                @if (Model.Contact.Websites != null)
+                {
+                    foreach (var website in Model.Contact.Websites)
+                    {
+                        <div class="row">
+                            <div class="col-12 col-md-6 mb-3">
+                                <input type="url" value="@website.Url" class="form-control" readonly />
+                                <input type="hidden" name="InputWebsites" value="@website.Url" />
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <button type="button" class="btn btn-outline-danger" onclick="removeWebsite()">Quitar</button>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-6 mb-3">
+                    <input type="url" id="url" class="form-control" />
+                </div>
+                <div class="col-12 col-md-6">
+                    <button type="button" class="btn btn-outline-primary" id="addwebsitebtn">Añadir</button>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row mb-3">
@@ -82,4 +102,5 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <partial name="_AddContactWebsites" />    
 }

@@ -4,7 +4,7 @@
     ViewData["Title"] = "Detalles contacto";
 }
 
-<h1>Detalles contacto</h1>
+<h1>Detalles contacto #@Model.Contact.Id</h1>
 
 <div class="row">
     <div class="col-12 col-md-6 mb-3">
@@ -44,10 +44,27 @@
             <textarea asp-for="Contact.Notes" class="form-control" disabled></textarea>
         </div>
     </div>
-
 </div>
-
-
+<div class="row">
+    <div class="mb-3">
+        <div class="mb-1">Sitios web</div>
+        <div id="websites">
+            @if (Model.Contact.Websites != null)
+            {
+                foreach (var website in Model.Contact.Websites)
+                {
+                    <div class="row">
+                        <div class="col-12 col-md-6 mb-3">
+                            <input type="url" value="@website.Url" class="form-control" disabled />
+                            <input type="hidden" name="InputWebsites" value="@website.Url" />
+                        </div>
+                        <div class="col-12 col-md-6"></div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
 <div class="row mb-3">
     <div class="col-6 col-md-3 col-xl-2">
         <a asp-controller="Contact" asp-action="Index" class="btn btn-secondary w-100">Volver</a>

@@ -124,7 +124,8 @@ namespace Contacts.Web.Controllers
                     Phone = contact.Phone,
                     Email = contact.Email,
                     Alias = contact.Alias,
-                    Notes = contact.Notes
+                    Notes = contact.Notes,
+                    Websites = contact.Websites,
                 },
                 GroupCheckList = groups.OrderBy(x => x.Name).Select(x => new CheckboxVM
                 {
@@ -162,7 +163,8 @@ namespace Contacts.Web.Controllers
                     Phone = contact.Phone,
                     Email = contact.Email,
                     Alias = contact.Alias,
-                    Notes = contact.Notes
+                    Notes = contact.Notes,
+                    Websites = contact.Websites
                 },
                 GroupCheckList = groups.OrderBy(x => x.Name).Select(x => new CheckboxVM
                 {
@@ -199,7 +201,7 @@ namespace Contacts.Web.Controllers
                 return View(contactVM);
             }
 
-            //Save edit contact
+            //Save contact
             Contact contact2Edit = await _uof.ContactRepository.GetAsync(id);
             contact2Edit.Name = contactVM.Contact.Name;
             contact2Edit.Phone = contactVM.Contact.Phone;
@@ -207,6 +209,7 @@ namespace Contacts.Web.Controllers
             contact2Edit.Alias = contactVM.Contact.Alias;
             contact2Edit.Notes = contactVM.Contact.Notes;
 
+            //Add groups to contact
             contact2Edit.Groups.Clear();
 
             if (contactVM.CheckedGroups != null)
@@ -219,16 +222,32 @@ namespace Contacts.Web.Controllers
                 }
             }
 
+            //Add websites to contact
+            contact2Edit.Websites.Clear();
+
+            if (contactVM.InputWebsites != null)
+            {
+                contact2Edit.Websites = new List<Website>();
+
+                foreach (var url in contactVM.InputWebsites)
+                {
+                    contact2Edit.Websites.Add(new Website
+                    {
+                        Url = url
+                    });
+                }
+            }
+
             await _uof.ContactRepository.UpdateAsync(contact2Edit);
             int saveResult = await _uof.SaveAsync();
 
             if (saveResult > 0)
             {
-                TempData["success"] = "Contacto creado con exito";
+                TempData["success"] = "Contacto editado con exito";
             }
             else
             {
-                TempData["error"] = "Error al crear contacto";
+                TempData["error"] = "Error al editar contacto";
             }
 
             return RedirectToAction("Index", "Contact");
