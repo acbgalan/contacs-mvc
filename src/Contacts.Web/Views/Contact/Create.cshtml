@@ -100,7 +100,8 @@
                 websites.innerHTML += `
                                     <div class="row">
                                         <div class="col-12 col-md-6 mb-3">
-                                                    <input type="url" name="InputWebsites" value="${inputUrl.value}" class="form-control" disabled/>
+                                                    <input type="url" value="${inputUrl.value}" class="form-control" readonly/>
+                                                    <input type="hidden" name="InputWebsites" value="${inputUrl.value}"/>
                                         </div>
                                         <div class="col-12 col-md-6">
                                                     <button type="button" class="btn btn-outline-danger" onclick="removeWebsite()">Quitar</button>

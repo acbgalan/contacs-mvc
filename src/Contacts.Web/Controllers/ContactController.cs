@@ -71,6 +71,19 @@ namespace Contacts.Web.Controllers
                 }
             }
 
+            if (contactVM.InputWebsites != null)
+            {
+                newContact.Websites = new List<Website>();
+
+                foreach (var url in contactVM.InputWebsites)
+                {
+                    newContact.Websites.Add(new Website
+                    {
+                        Url = url
+                    });
+                }
+            }
+
             await _uof.ContactRepository.AddAsync(newContact);
             int saveResult = await _uof.SaveAsync();
 
