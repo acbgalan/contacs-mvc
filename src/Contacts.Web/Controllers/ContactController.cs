@@ -124,7 +124,8 @@ namespace Contacts.Web.Controllers
                     Phone = contact.Phone,
                     Email = contact.Email,
                     Alias = contact.Alias,
-                    Notes = contact.Notes
+                    Notes = contact.Notes,
+                    Websites = contact.Websites,
                 },
                 GroupCheckList = groups.OrderBy(x => x.Name).Select(x => new CheckboxVM
                 {

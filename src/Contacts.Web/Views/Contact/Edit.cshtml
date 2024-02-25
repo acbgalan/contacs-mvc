@@ -4,7 +4,7 @@
     ViewData["Title"] = "Editar contacto";
 }
 
-<h1>Editar contacto</h1>
+<h1>Editar contacto #@Model.Contact.Id</h1>
 
 <form asp-controller="Contact" asp-action="Edit" method="post">
     <input type="hidden" asp-for="Contact.Id" />
@@ -60,8 +60,6 @@
             </div>
         </div>
     </div>
-
-
     <div class="row">
         <div class="mb-3">
             <div class="mb-1">Sitios web</div>
@@ -92,8 +90,6 @@
             </div>
         </div>
     </div>
-
-
     <div class="row mb-3">
         <div class="col-6 col-md-3 col-xl-2">
             <input type="submit" class="btn btn-primary w-100" value="Guardar" />
