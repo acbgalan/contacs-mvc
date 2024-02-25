@@ -242,11 +242,11 @@ namespace Contacts.Web.Controllers
 
             if (saveResult > 0)
             {
-                TempData["success"] = "Contacto creado con exito";
+                TempData["success"] = "Contacto editado con exito";
             }
             else
             {
-                TempData["error"] = "Error al crear contacto";
+                TempData["error"] = "Error al editar contacto";
             }
 
             return RedirectToAction("Index", "Contact");
