@@ -62,7 +62,23 @@
     <div class="row">
         <div class="mb-3">
             <div class="mb-1">Sitios web</div>
-            <div id="websites"></div>
+            <div id="websites">
+                @if (Model.InputWebsites != null)
+                {
+                    foreach (var url in Model.InputWebsites)
+                    {
+                        <div class="row">
+                            <div class="col-12 col-md-6 mb-3">
+                                <input type="url" value="@url" class="form-control" readonly />
+                                <input type="hidden" name="InputWebsites" value="@url" />
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <button type="button" class="btn btn-outline-danger" onclick="removeWebsite()">Quitar</button>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
             <div class="row">
                 <div class="col-12 col-md-6 mb-3">
                     <input type="url" id="url" class="form-control" />
@@ -98,15 +114,15 @@
                 const websites = document.getElementById('websites');
 
                 websites.innerHTML += `
-                                    <div class="row">
-                                        <div class="col-12 col-md-6 mb-3">
-                                                    <input type="url" value="${inputUrl.value}" class="form-control" readonly/>
-                                                    <input type="hidden" name="InputWebsites" value="${inputUrl.value}"/>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                                    <button type="button" class="btn btn-outline-danger" onclick="removeWebsite()">Quitar</button>
-                                        </div>
-                                    </div>`;
+                                                            <div class="row">
+                                                                <div class="col-12 col-md-6 mb-3">
+                                                                            <input type="url" value="${inputUrl.value}" class="form-control" readonly/>
+                                                                            <input type="hidden" name="InputWebsites" value="${inputUrl.value}"/>
+                                                                </div>
+                                                                <div class="col-12 col-md-6">
+                                                                            <button type="button" class="btn btn-outline-danger" onclick="removeWebsite()">Quitar</button>
+                                                                </div>
+                                                            </div>`;
                 inputUrl.value = '';
             }
         }
