@@ -106,41 +106,5 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('addwebsitebtn').addEventListener('click', addWebsite);
-        });
-
-        function addWebsite() {
-            const inputUrl = document.getElementById('url');
-
-            if (inputUrl.value != '') {
-                const websites = document.getElementById('websites');
-
-                websites.innerHTML += `
-                                                                            <div class="row">
-                                                                                <div class="col-12 col-md-6 mb-3">
-                                                                                            <input type="url" value="${inputUrl.value}" class="form-control" readonly/>
-                                                                                            <input type="hidden" name="InputWebsites" value="${inputUrl.value}"/>
-                                                                                </div>
-                                                                                <div class="col-12 col-md-6">
-                                                                                            <button type="button" class="btn btn-outline-danger" onclick="removeWebsite()">Quitar</button>
-                                                                                </div>
-                                                                            </div>`;
-                inputUrl.value = '';
-            }
-        }
-
-        function removeWebsite() {
-            // Get the button that triggered the event
-            var button = event.target;
-
-            // Get the parent element of the button (the div with class row)
-            var rowDiv = button.closest('.row');
-
-            // Remove the div with class row
-            rowDiv.remove();
-        }
-    </script>
+    <partial name="_AddContactWebsites" />    
 }
