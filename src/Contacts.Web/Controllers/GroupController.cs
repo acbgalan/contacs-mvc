@@ -14,8 +14,15 @@ namespace Contacts.Web.Controllers
         {
             _uow = unitOfWork;
         }
-        public async Task<IActionResult> Index(string sort)
+        public IActionResult Index(string sort, string currentSort)
         {
+            if (currentSort != null)
+            {
+                sort = currentSort;
+            }
+
+            ViewBag.CurrentSort = sort;
+
             ViewBag.Id = string.IsNullOrEmpty(sort) ? "id_desc" : string.Empty;
             ViewBag.Name = sort == "name" ? "name_desc" : "name";
 

@@ -20,3 +20,16 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/* Custom CSS */
+thead a {
+    text-decoration: none;
+}
+
+thead a {
+    color: whitesmoke;    
+}
+
+thead a:hover{
+    color:white;
+}
