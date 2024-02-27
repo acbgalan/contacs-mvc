@@ -71,5 +71,9 @@ namespace Contacts.DataAccess.Repository
             return await _context.SaveChangesAsync();
         }
 
+        public IQueryable<Group> GetAllIQueryableAsync()
+        {
+            return _context.Groups.AsQueryable();
+        }
     }
 }
