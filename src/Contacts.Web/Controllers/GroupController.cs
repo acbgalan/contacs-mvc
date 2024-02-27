@@ -22,7 +22,6 @@ namespace Contacts.Web.Controllers
             }
 
             ViewBag.CurrentSort = sort;
-
             ViewBag.Id = string.IsNullOrEmpty(sort) ? "id_desc" : string.Empty;
             ViewBag.Name = sort == "name" ? "name_desc" : "name";
 
