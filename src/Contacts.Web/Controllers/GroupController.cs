@@ -26,7 +26,7 @@ namespace Contacts.Web.Controllers
             ViewBag.Id = string.IsNullOrEmpty(sort) ? "id_desc" : string.Empty;
             ViewBag.Name = sort == "name" ? "name_desc" : "name";
 
-            var groups = _uow.GroupRepository.GetAllIQueryableAsync();
+            var groups = _uow.GroupRepository.GetAllIQueryable();
 
             switch (sort)
             {
