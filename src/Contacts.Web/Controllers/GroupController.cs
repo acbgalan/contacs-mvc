@@ -2,6 +2,7 @@
 
 using Contacts.DataAccess.Repository.Contracts;
 using Contacts.Models;
+using System.Security.Cryptography.Xml;
 
 namespace Contacts.Web.Controllers
 {
@@ -13,11 +14,30 @@ namespace Contacts.Web.Controllers
         {
             _uow = unitOfWork;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sort)
         {
-            var groups = await _uow.GroupRepository.GetAllAsync();
+            ViewBag.Id = string.IsNullOrEmpty(sort) ? "id_desc" : string.Empty;
+            ViewBag.Name = sort == "name" ? "name_desc" : "name";
 
-            return View(groups);
+            var groups = _uow.GroupRepository.GetAllIQueryableAsync();
+
+            switch (sort)
+            {
+                case "id_desc":
+                    groups = groups.OrderByDescending(x => x.Id);
+                    break;
+                case "name":
+                    groups = groups.OrderBy(x => x.Name);
+                    break;
+                case "name_desc":
+                    groups = groups.OrderByDescending(x => x.Name);
+                    break;
+                default:
+                    groups = groups.OrderBy(x => x.Id);
+                    break;
+            }
+
+            return View(groups.ToList());
         }
 
         public IActionResult Create()
