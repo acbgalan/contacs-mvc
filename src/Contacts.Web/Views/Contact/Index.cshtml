@@ -14,10 +14,72 @@
 <table class="table table-hover">
     <thead>
         <tr class="table-dark">
-            <th>#</th>
-            <th>@Html.DisplayNameFor(x => x.Name)</th>
-            <th>@Html.DisplayNameFor(x => x.Phone)</th>
-            <th>@Html.DisplayNameFor(x => x.Email)</th>
+            <th>
+                <a asp-controller="Contact" asp-action="Index" asp-route-sort="@ViewBag.Id">
+                    @switch (ViewBag.CurrentSort)
+                    {
+                        case "id_desc":
+                            <i class="bi bi-sort-down"></i>
+                            break;
+                        default:
+                            if (string.IsNullOrEmpty(ViewBag.CurrentSort))
+                            {
+                                <i class="bi bi-sort-up"></i>
+                            }
+
+                            break;
+                    }
+                    #
+                </a>
+            </th>
+            <th>
+                <a asp-controller="Contact" asp-action="Index" asp-route-sort="@ViewBag.Name">
+                    @switch (ViewBag.CurrentSort)
+                    {
+                        case "name_desc":
+                            <i class="bi bi-sort-down"></i>
+                            break;
+                        case "name":
+                            <i class="bi bi-sort-up"></i>
+                            break;
+                        default:
+                            break;
+                    }
+                    @Html.DisplayNameFor(x => x.Name)
+                </a>
+            </th>
+            <th>
+                <a asp-controller="Contact" asp-action="Index" asp-route-sort="@ViewBag.Phone">
+                    @switch (ViewBag.CurrentSort)
+                    {
+                        case "phone_desc":
+                            <i class="bi bi-sort-down"></i>
+                            break;
+                        case "phone":
+                            <i class="bi bi-sort-up"></i>
+                            break;
+                        default:
+                            break;
+                    }
+                    @Html.DisplayNameFor(x => x.Phone)
+                </a>
+            </th>
+            <th>
+                <a asp-controller="Contact" asp-action="Index" asp-route-sort="@ViewBag.Email">
+                    @switch (ViewBag.CurrentSort)
+                    {
+                        case "email_desc":
+                            <i class="bi bi-sort-down"></i>
+                            break;
+                        case "email":
+                            <i class="bi bi-sort-up"></i>
+                            break;
+                        default:
+                            break;
+                    }
+                    @Html.DisplayNameFor(x => x.Email)
+                </a>
+            </th>
             <th>Operaciones</th>
         </tr>
     </thead>

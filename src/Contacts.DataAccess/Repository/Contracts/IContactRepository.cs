@@ -10,5 +10,6 @@ namespace Contacts.DataAccess.Repository.Contracts
 {
     public interface IContactRepository : IRepositoryAsync<Contact>
     {
+        public IQueryable<Contact> GetAllIQueryable();
     }
 }

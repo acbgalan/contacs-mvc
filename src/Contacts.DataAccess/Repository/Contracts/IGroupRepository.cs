@@ -10,5 +10,6 @@ namespace Contacts.DataAccess.Repository.Contracts
 {
     public interface IGroupRepository : IRepositoryAsync<Group>
     {
+        IQueryable<Group> GetAllIQueryable(); 
     }
 }

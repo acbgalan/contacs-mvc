@@ -13,8 +13,38 @@
 <table class="table table-hover">
     <thead>
         <tr class="table-dark">
-            <th>#</th>
-            <th>@Html.DisplayNameFor(x => x.Name)</th>
+            <th>
+                <a asp-controller="group" asp-action="Index" asp-route-sort="@ViewBag.Id">
+                    @if (string.IsNullOrEmpty(ViewBag.CurrentSort))
+                    {
+                        <i class="bi bi-sort-down"></i>
+                    }
+
+                    @if (ViewBag.CurrentSort == "id_desc")
+                    {
+                        <i class="bi bi-sort-up"></i>
+                    }
+
+                    #
+                </a>
+            </th>
+            <th>
+                <a asp-controller="Group" asp-action="Index" asp-route-sort="@ViewBag.Name">
+                    @switch (ViewBag.CurrentSort)
+                    {
+                        case "name":
+                            <i class="bi bi-sort-down"></i>
+                            break;
+                        case "name_desc":
+                            <i class="bi bi-sort-up"></i>
+                            break;
+                        default:
+                            break;
+                    }
+
+                    @Html.DisplayNameFor(x => x.Name)
+                </a>
+            </th>
             <th>Operaciones</th>
         </tr>
     </thead>

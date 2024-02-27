@@ -14,9 +14,48 @@ namespace Contacts.Web.Controllers
             _uof = unitOfWork;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sort, string currentSort)
         {
-            var contacts = await _uof.ContactRepository.GetAllAsync();
+            if (currentSort != null)
+            {
+                sort = currentSort;
+            }
+
+            ViewBag.CurrentSort = sort;
+            ViewBag.Id = string.IsNullOrEmpty(sort) ? "id_desc" : string.Empty;
+            ViewBag.Name = sort == "name_desc" ? "name" : "name_desc";
+            ViewBag.Phone = sort == "phone_desc" ? "phone" : "phone_desc";
+            ViewBag.Email = sort == "email_desc" ? "email" : "email_desc";
+
+            var contacts = _uof.ContactRepository.GetAllIQueryable();
+
+            switch (sort)
+            {
+                case "id_desc":
+                    contacts = contacts.OrderByDescending(x => x.Id);
+                    break;
+                case "name":
+                    contacts = contacts.OrderBy(x => x.Name);
+                    break;
+                case "name_desc":
+                    contacts = contacts.OrderByDescending(x => x.Name);
+                    break;
+                case "phone":
+                    contacts = contacts.OrderBy(x => x.Phone);
+                    break;
+                case "phone_desc":
+                    contacts = contacts.OrderByDescending(x => x.Phone);
+                    break;
+                case "email":
+                    contacts = contacts.OrderBy(x => x.Email);
+                    break;
+                case "email_desc":
+                    contacts = contacts.OrderByDescending(x => x.Email);
+                    break;
+                default:
+                    contacts = contacts.OrderBy(x => x.Id);
+                    break;
+            }
 
             return View(contacts);
         }
