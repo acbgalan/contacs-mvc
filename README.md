@@ -14,4 +14,5 @@ Entity Framework
 Web MVC
 	Notifications with bootstrap alerts
 	Multiple checkbox dinamically. Contact-Groups
+	Sort lists
 	
