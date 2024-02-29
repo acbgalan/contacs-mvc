@@ -14,7 +14,7 @@ namespace Contacts.Web.Controllers
         {
             _uow = unitOfWork;
         }
-        public IActionResult Index(string sort, string currentSort)
+        public IActionResult Index(string sort, string currentSort, string search)
         {
             if (currentSort != null)
             {
@@ -26,6 +26,11 @@ namespace Contacts.Web.Controllers
             ViewBag.Name = sort == "name" ? "name_desc" : "name";
 
             var groups = _uow.GroupRepository.GetAllIQueryable();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                groups = groups.Where(x => x.Name.Contains(search));
+            }
 
             switch (sort)
             {
@@ -42,6 +47,8 @@ namespace Contacts.Web.Controllers
                     groups = groups.OrderBy(x => x.Id);
                     break;
             }
+
+            ViewBag.CurrentSearchString = search ?? null;
 
             return View(groups.ToList());
         }
